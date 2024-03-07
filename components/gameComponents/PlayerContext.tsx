@@ -1,11 +1,13 @@
-import React, { createContext, useContext, useState } from "react";
-import { BusinessManager } from "./BusinessManager";
+// PlayerContext.tsx
+
+import React, { createContext, useContext, useMemo, useState } from "react";
+import BusinessManager from "./BusinessManager";
 
 interface PlayerContextType {
   coins: number;
   addCoins: (amount: number) => void;
   removeCoins: (amount: number) => void;
-  prestige: () => void; // Adicionamos a função de prestígio
+  prestige: () => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | null>(null);
@@ -19,8 +21,11 @@ export const usePlayer = () => {
 };
 
 export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [coins, setCoins] = useState(0); // Estado para armazenar a quantidade de moedas
-  const [businessManager] = useState(new BusinessManager()); // Gerenciador de negócios
+  const [coins, setCoins] = useState(0);
+  const [, forceUpdate] = useState(0);
+  const newListener = () => {
+    forceUpdate(prev => prev + 1);
+  };
 
   const addCoins = (amount: number) => {
     setCoins((prevCoins) => prevCoins + amount);
@@ -35,21 +40,23 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const prestige = () => {
-    // Salvar progresso parcial
-    const coinsSpent = coins * 0.2; // 20% das moedas gastas
-    const coinsRemaining = coins * 0.1; // 10% das moedas restantes
-
-    // Reiniciar todas as moedas
+    const coinsSpent = coins * 0.2;
+    const coinsRemaining = coins * 0.1;
+  
     setCoins(coinsRemaining);
-
+  
     // Reiniciar todos os negócios para valores iniciais
-    // (Você precisa implementar essa lógica no BusinessManager)
-
+    BusinessManager.resetarNegocios()
+    
+    // Exibir os negócios resetados no console
+    console.log("Negócios resetados:");
+    BusinessManager.getTodosNegocios(0).forEach((negocio, index) => {
+      console.log(`Negócio ${index + 1}:`, negocio);
+    });
+  
     console.log("Prestige completed!");
-
-    // Outras ações de prestígio, se houver
-
   };
+  
 
   const playerContextValue: PlayerContextType = {
     coins,

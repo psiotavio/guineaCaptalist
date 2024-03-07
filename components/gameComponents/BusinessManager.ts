@@ -11,17 +11,85 @@ interface BusinessState {
   desbloqueado: boolean; // Adiciona o status de desbloqueio
 }
 
-export class BusinessManager {
-  private listaNegocios: Business[];
+ class BusinessManager {
+  public listaNegocios: Business[] = [];
+  public initialBusinessList: Business[] = [
+    new Business("Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true),
+    new Business("Guinea Cops", 200, 500, 2, 10, require("../../assets/gameImg/guinea2.png"), 0, false),
+    new Business("Chef MR. Guinea", 300, 1000, 3, 30, require("../../assets/gameImg/guinea3.png"), 0, false),
+    new Business("Guinea Dev.", 400, 5000, 4, 60, require("../../assets/gameImg/guinea4.png"), 0, false),
+    new Business("Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false),
+  ];
+  private listeners: (() => void )[] = [];
 
   constructor() {
-    this.listaNegocios = [];
+    this.resetarNegocios()
+  }
+
+  addListener(listener: () => void){
+    this.listeners.push(listener);
+  }
+
+  removeListener(listener: () => void) {
+    this.listeners = this.listeners.filter((l) => l !== listener);
+  }
+
+
+
+  notifyAll() {
+    this.listeners.forEach((listener) => listener());
+  }
+
+  get todosNegocios() {
+    return this.listaNegocios.map((negocio) => {
+      const desbloqueado = negocio.getDesbloqueado();
+      // Aqui estamos criando um novo objeto Business com os mesmos dados do BusinessState
+      return new Business(
+        negocio.nome,
+        negocio.custo,
+        negocio.lucro,
+        negocio.nivelEficiencia,
+        negocio.tempoProducao,
+        negocio.imagem,
+        negocio.quantidade,
+        negocio.desbloqueado
+      );
+    });
   }
 
   // Método para adicionar um novo negócio à lista
   adicionarNegocio(negocio: Business): void {
     this.listaNegocios.push(negocio);
+    this.initialBusinessList.push(negocio); // Adiciona o negócio à lista inicial
   }
+
+  resetarNegocios(): void {
+    console.log("CHAMOU", this.initialBusinessList); // Adicionar este console.log
+
+    this.listaNegocios = this.initialBusinessList.map(negocio => {
+      console.log(negocio)
+      const negocioResetado = new Business(
+        negocio.nome,
+        negocio.custo,
+        negocio.lucro,
+        negocio.nivelEficiencia,
+        negocio.tempoProducao,
+        negocio.imagem,
+        0, // Resetando a quantidade para zero
+        negocio.desbloqueado
+        );
+        console.log(negocio)
+      return negocioResetado;
+    });
+    this.notifyAll()
+  }
+  
+  setCoin(coin: number, negocio: string){
+    const negocioUpdate = this.getNegocio(negocio);
+    negocioUpdate?.setCusto(coin)
+  }
+
+
   atualizarQuantidade(nome: string, novaQuantidade: number): void {
     const negocio = this.listaNegocios.find((n) => n.getNome() === nome);
     if (negocio) {
@@ -57,22 +125,23 @@ export class BusinessManager {
     return this.listaNegocios.find((n) => n.getNome() === nome);
   }
 
-  // Método para obter todos os negócios da lista
-  getTodosNegocios(tempoDecorrido: number): BusinessState[] {
-    // Calcula o lucro atual de cada negócio com base no tempo decorrido
-    return this.listaNegocios.map((negocio) => {
-      const desbloqueado = negocio.getDesbloqueado();
-      console.log("Negócio:", negocio.getNome(), "Desbloqueado:", desbloqueado);
-      return {
-        nome: negocio.getNome(),
-        custo: negocio.getCusto(),
-        lucro: negocio.getLucro(),
-        nivelEficiencia: negocio.getNivelEficiencia(),
-        tempoProducao: negocio.tempoProducao,
-        lucroAtual: negocio.calcularLucro(tempoDecorrido),
-        quantidade: negocio.getQuantidade(),
-        desbloqueado: negocio.getDesbloqueado(),
-      };
-    });
-  }
+  // Atualize a assinatura da função getTodosNegocios() para retornar Business[]
+getTodosNegocios(tempoDecorrido: number): Business[] {
+  // Calcula o lucro atual de cada negócio com base no tempo decorrido
+  return this.listaNegocios.map((negocio) => {
+    const desbloqueado = negocio.getDesbloqueado();
+    // Aqui estamos criando um novo objeto Business com os mesmos dados do BusinessState
+    return new Business(
+      negocio.nome,
+      negocio.custo,
+      negocio.lucro,
+      negocio.nivelEficiencia,
+      negocio.tempoProducao,
+      negocio.imagem,
+      negocio.quantidade,
+      negocio.desbloqueado
+    );
+  });
 }
+}
+export default new BusinessManager();

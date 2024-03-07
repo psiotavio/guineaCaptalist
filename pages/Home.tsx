@@ -1,23 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, ImageBackground } from "react-native";
+import React, { useState, useEffect, } from "react";
+import { StyleSheet, View, ScrollView, ImageBackground, TouchableOpacity,Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { inicializarNegocios } from "../datas/businessData";
 import BuyBusiness from "../components/BuyBusiness";
 import { Business } from "../components/gameComponents/Business";
 import CustomHeader from "../components/CustomHeader";
 import { usePlayer } from "../components/gameComponents/PlayerContext";
+import BusinessManager from "../components/gameComponents/BusinessManager";
 
 const Home = () => {
   const [selectedQuantity, setSelectedQuantity] = useState("1x");
-  const { businessManager, businesses } = inicializarNegocios();
-  const { coins, addCoins } = usePlayer();
+  const [value, forceUpdate] = useState(0);
+
+  function update() {
+    console.log(`update`)
+    forceUpdate(new Date().getTime())
+    updateList(BusinessManager.todosNegocios)
+  }
+
+  const [list, updateList] = useState(BusinessManager.todosNegocios);
+
 
   useEffect(() => {
-    // Carregar os negócios ao montar o componente
-    const loadBusinesses = async () => {
-      // Lógica para carregar os negócios, se necessário
+    BusinessManager.addListener(update);
+    
+    // Cleanup para remover o ouvinte quando o componente for desmontado
+    return () => {
+      BusinessManager.removeListener(update);
     };
-    loadBusinesses();
+  }, []);
+  
+
+  const { coins, addCoins, } = usePlayer();
+  
+  // Atualizando para capturar a instância do gerenciador de negócios
+
+  useEffect(() => {
+    // Lógica para carregar os negócios, se necessário
   }, []);
 
   const handleBusinessPress = (business: Business) => {
@@ -39,9 +57,12 @@ const Home = () => {
             coins={coins}
             profileImage={require("../assets/gameImg/guineaProfile.jpg")}
             onSelectQuantity={handleSelectQuantity}
+            onPrestige={BusinessManager.resetarNegocios} // Corrigindo o nome da função
           />
+          <TouchableOpacity onPress={() => BusinessManager.resetarNegocios()}><Text>ajhsdjhqsdj</Text></TouchableOpacity>
           <ScrollView>
-            {businesses.map((business, index) => (
+            <Text>{value}</Text>
+            {list.map((business, index) => (
               <BuyBusiness
                 key={index}
                 business={business}

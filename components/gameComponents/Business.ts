@@ -28,6 +28,19 @@ export class Business {
     this.desbloqueado = desbloqueado; // Inicializando o status de desbloqueio
   }
 
+  clone(): Business {
+    return new Business(
+      this.nome,
+      this.custo,
+      this.lucro,
+      this.nivelEficiencia,
+      this.tempoProducao,
+      this.imagem,
+      this.quantidade,
+      this.desbloqueado
+    );
+  }
+
   // Métodos getter e setter para o status de desbloqueio
   getDesbloqueado(): boolean {
     return this.desbloqueado;

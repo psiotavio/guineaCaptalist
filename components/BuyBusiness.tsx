@@ -30,8 +30,13 @@ const BuyBusiness: React.FC<BuyBusinessProps> = ({
     setItemLucro(business.getLucro());
   }, [business.getLucro()]);
 
+  // Atualiza o estado desbloqueado sempre que business.desbloqueado for alterado
+  useEffect(() => {
+    setDesbloqueado(business.getDesbloqueado());
+  }, [business.getDesbloqueado()]);
+
   const increaseQuantity = () => {
-    setDesbloqueado(true);
+    business.setDesbloqueado(true);
     const selectedQuantityNumber = parseInt(selectedQuantity.slice(0, -1)); // Remove o "x" e converte para número
     const newQuantity = itemQuantity + selectedQuantityNumber;
     setItemQuantity(newQuantity); // Atualiza a quantidade local
@@ -42,7 +47,7 @@ const BuyBusiness: React.FC<BuyBusinessProps> = ({
 
   return (
     <>
-      {desbloqueado ? (
+      {business.desbloqueado ? (
         <View style={styles.container}>
           <StoreItem image={business.imagem}></StoreItem>
           <View style={styles.secondSection}>
@@ -54,9 +59,10 @@ const BuyBusiness: React.FC<BuyBusinessProps> = ({
               <BuyButton
                 quantity={selectedQuantity}
                 coins={playerCoins}
-                initialItemCost={business.custo}
+                initialItemCost={() => business.custo}
                 increaseQuantity={increaseQuantity}
                 style={1}
+                business={business}
               />
             </View>
           </View>
@@ -66,10 +72,11 @@ const BuyBusiness: React.FC<BuyBusinessProps> = ({
             <BuyButton
                 quantity={selectedQuantity}
                 coins={playerCoins}
-                initialItemCost={business.custo}
+                initialItemCost={() => business.custo}
                 increaseQuantity={increaseQuantity}
                 additionalText={business.getNome()}
                 style={2}
+                business={business}
               />
         </View>
       )}

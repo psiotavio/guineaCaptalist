@@ -41,12 +41,15 @@ interface HeaderProps {
   profileImage: any;
   coins: number;
   onSelectQuantity: (quantity: string) => void;
+  onPrestige: () => void; // Adicionando onPrestige
 }
+
 
 const CustomHeader: React.FC<HeaderProps> = ({
   profileImage,
   coins,
   onSelectQuantity,
+  onPrestige, // Adicionando onPrestige
 }) => {
   const handleSelectQuantity = (quantity: string) => {
     onSelectQuantity(quantity);

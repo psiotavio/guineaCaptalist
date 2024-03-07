@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { usePlayer } from "./gameComponents/PlayerContext";
+import BusinessManager from "./gameComponents/BusinessManager";
+import { Business } from "./gameComponents/Business";
 
 interface BuyButtonProps {
   quantity: string;
   coins: number; // Moedas disponíveis do jogador
-  initialItemCost: number; // Custo inicial do item
+  initialItemCost: () => number; // Função para calcular o custo inicial do item
   increaseQuantity: () => void; // Função para aumentar a quantidade de itens
   style: number; // Adiciona a propriedade de estilo
   additionalText?: string; // Texto adicional opcional para o estilo 2
+  business: Business;
 }
 
 const formatNumber = (value: number): string => {
@@ -27,9 +30,14 @@ const formatNumber = (value: number): string => {
   }
 };
 
-const BuyButton: React.FC<BuyButtonProps> = ({ quantity, coins, initialItemCost, increaseQuantity, style, additionalText }) => {
-  const [itemCost, setItemCost] = useState(initialItemCost);
+const BuyButton: React.FC<BuyButtonProps> = ({ quantity, coins, initialItemCost, increaseQuantity, style, additionalText, business }) => {
+  const [itemCost, setItemCost] = useState(initialItemCost());
   const { removeCoins } = usePlayer();
+
+  useEffect(() => {
+    // Atualiza o custo do item sempre que os valores dos negócios mudarem
+    setItemCost(initialItemCost());
+  }, [business]);
 
   const calculateTotalCost = (quantity: string): { totalCost: number; numItems: number } => {
     let numItems = parseInt(quantity, 10);
@@ -43,6 +51,7 @@ const BuyButton: React.FC<BuyButtonProps> = ({ quantity, coins, initialItemCost,
   const handlePress = () => {
     removeCoins(totalCost);
     setItemCost(totalCost * 1.3);
+    BusinessManager.setCoin(totalCost, business.getNome());
     increaseQuantity(); // Aumenta a quantidade de itens
   };
 
