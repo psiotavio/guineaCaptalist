@@ -32,7 +32,6 @@ const Home = () => {
 
   const { coins, addCoins, } = usePlayer();
   
-  // Atualizando para capturar a instância do gerenciador de negócios
 
   useEffect(() => {
     // Lógica para carregar os negócios, se necessário
