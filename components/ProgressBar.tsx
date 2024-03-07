@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
-import { Player } from "../components/gameComponents/Player"
 import { usePlayer } from "./gameComponents/PlayerContext";
 
 interface ProgressBarProps {
@@ -10,8 +9,6 @@ interface ProgressBarProps {
 }
 
 const separateNumberAndDefinition = (value: number): [string, string] => {
- 
-
   if (value >= 1000000000000000) {
     const formattedValue = (value / 1000000000000).toLocaleString("pt-BR", {
       minimumFractionDigits: 2,
@@ -45,22 +42,27 @@ const separateNumberAndDefinition = (value: number): [string, string] => {
   }
 };
 
-
-
-const ProgressBarComponent: React.FC<ProgressBarProps> = ({ duration, lucro }) => {
+const ProgressBarComponent: React.FC<ProgressBarProps> = ({
+  duration,
+  lucro,
+}) => {
   const [progress, setProgress] = useState(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(undefined);
-  const [intervalId2, setIntervalId2] = useState<NodeJS.Timeout | undefined>(undefined);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
+    undefined
+  );
   const [timer, setTimer] = useState(duration);
   const [pressed, setPressed] = useState(false);
-  const { coins, addCoins, removeCoins } = usePlayer(); 
+  const [canPress, setCanPress] = useState(true); // Alterado para true para permitir o primeiro clique
+  const { coins, addCoins, removeCoins } = usePlayer();
 
   const handlePress = () => {
+    if (!canPress) return; // Não permite clicar se canPress for false
     setPressed(!pressed);
   };
 
   useEffect(() => {
     if (pressed) {
+      setCanPress(false); // Impede futuros cliques até que o timer chegue a 0
       setTimer(duration);
       const newIntervalId = setInterval(() => {
         setProgress((prevProgress) => {
@@ -70,7 +72,6 @@ const ProgressBarComponent: React.FC<ProgressBarProps> = ({ duration, lucro }) =
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
       setIntervalId(newIntervalId);
-      
     } else {
       clearInterval(intervalId);
       setProgress(0);
@@ -86,9 +87,9 @@ const ProgressBarComponent: React.FC<ProgressBarProps> = ({ duration, lucro }) =
 
   useEffect(() => {
     if (timer === 0) {
-      addCoins(lucro)
+      addCoins(lucro);
       setPressed(false);
-    
+      setCanPress(true); // Permite o botão ser pressionado novamente quando o timer chegar a 0
     }
   }, [timer]);
 
@@ -117,12 +118,8 @@ const ProgressBarComponent: React.FC<ProgressBarProps> = ({ duration, lucro }) =
           color="#F0E68C"
         />
         <View style={styles.lucroContainer}>
-        <Text style={styles.lucro}>
-          {formattedLucro} 
-        </Text>
-        <Text style={styles.lucroText}>
-        {definition}
-        </Text>
+          <Text style={styles.lucro}>{formattedLucro}</Text>
+          <Text style={styles.lucroText}>{definition}</Text>
         </View>
       </View>
       <View style={styles.time}>
@@ -173,15 +170,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
   },
-  lucroContainer:{
-    height:"100%",
-    width:"100%",
+  lucroContainer: {
+    height: "100%",
+    width: "100%",
     position: "absolute",
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"center"
-  }
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default ProgressBarComponent;

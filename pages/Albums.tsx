@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ProgressBarComponent from '../components/ProgressBar';
-import PrestigeButton from '../components/PrestigeButton';
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import PrestigeButton from "../components/PrestigeButton";
+import CustomHeader from "../components/CustomHeader";
+import { usePlayer } from "../components/gameComponents/PlayerContext";
 
 const Albums = () => {
   const [isProgressBarActive, setIsProgressBarActive] = useState(false); // Estado para rastrear se a barra de progresso está ativa
+  const { coins, addCoins } = usePlayer();
 
   const handleProgressBarPress = () => {
     if (!isProgressBarActive) {
@@ -22,7 +24,14 @@ const Albums = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <PrestigeButton />
+        <CustomHeader
+          coins={coins}
+          profileImage={require("../assets/gameImg/guineaProfile.jpg")}
+          onSelectQuantity={() => {}}
+        />
+        <View style={styles.prestigeButton}>
+          <PrestigeButton />
+        </View>
       </View>
     </SafeAreaProvider>
   );
@@ -31,9 +40,14 @@ const Albums = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "lightblue",
+  },
+  prestigeButton: {
+    alignSelf: "center",
+    width: "30%",
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: 'lightblue',
+    display: "flex",
+    flex: 1,
   },
 });
 

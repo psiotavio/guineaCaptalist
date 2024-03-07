@@ -11,21 +11,28 @@ const PrestigeButton: React.FC = () => {
 
   return (
     <TouchableOpacity onPress={handleClick} style={styles.prestigeButton}>
-        <Text>Prestige</Text>
+        <Text style={styles.textButton}>Prestige</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   prestigeButton: {
+    width: "100%",
     backgroundColor: "#FF7F50",
     padding: 10,
     height: 45,
     borderRadius: 5,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent:"center",
     flexDirection: "row",
+    
   },
+  textButton:{
+    color: "#ffffff",
+    fontSize: 14,
+    fontWeight: "bold",
+  }
 });
 
 export default PrestigeButton;

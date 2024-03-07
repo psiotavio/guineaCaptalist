@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Avatar, Text } from 'react-native-paper';
+import * as React from "react";
+import { View, StyleSheet } from "react-native";
+import { Avatar } from "react-native-paper";
 
 interface StoreItemProps {
   image: any; // Tipo da propriedade de imagem
@@ -9,27 +9,37 @@ interface StoreItemProps {
 const StoreItem: React.FC<StoreItemProps> = ({ image }) => {
   return (
     <View style={styles.container}>
-      <Avatar.Image
-        size={100}
-        source={image}
-        style={styles.avatar}
-      />
+      <View style={styles.border}>
+          <Avatar.Image size={80} source={image} style={styles.avatar} />
+        </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 16,
   },
   avatar: {
-    backgroundColor: 'lightgray',
-    borderWidth: 3,
-    borderColor: "gray",
+    backgroundColor: "lightgray",
+    alignItems: "center",
   },
+  border: {
+    backgroundColor: "lightgray",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 95, // Tamanho da borda deve ser ajustado conforme necessário
+    height: 95, // Tamanho da borda deve ser ajustado conforme necessário
+    borderRadius: 100,
+    borderWidth: 5,
+    borderColor: "gray", // Cor da borda
+    shadowOpacity: 0.5,
+    shadowColor:"black",
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  
 });
 
 export default StoreItem;
