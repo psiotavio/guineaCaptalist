@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet} from "react-native"
+import { StyleSheet } from "react-native";
 import { BottomNavigation } from "react-native-paper";
 import Home from "../pages/Home";
 import Albums from "../pages/Albums";
@@ -15,13 +15,17 @@ const MyDownTabs = () => {
       focusedIcon: "home",
       unfocusedIcon: "home-outline",
     },
-    { key: "albums", title: "Albums", focusedIcon: "album" },
-    { key: "recents", title: "Recents", focusedIcon: "history" },
+    {
+      key: "albums",
+      title: "Loja de Prestígio",
+      focusedIcon: "cart",
+      unfocusedIcon: "cart-outline",
+    },
     {
       key: "notifications",
-      title: "Notifications",
-      focusedIcon: "bell",
-      unfocusedIcon: "bell-outline",
+      title: "Configurações",
+      focusedIcon: "cog",
+      unfocusedIcon: "cog-outline",
     },
   ]);
 
@@ -34,7 +38,7 @@ const MyDownTabs = () => {
 
   return (
     <BottomNavigation
-    barStyle={{ backgroundColor: '#0F2E40' }} 
+      barStyle={{ backgroundColor: "#0F2E40" }}
       sceneAnimationEnabled={true}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
@@ -49,13 +53,11 @@ const MyDownTabs = () => {
         shadowOpacity: 0.5,
         shadowOffset: { width: 0, height: 0 },
         opacity: 0.5,
+        padding: 72,
+        borderRadius: 0
       }}
     />
   );
 };
-
-
-
-
 
 export default MyDownTabs;

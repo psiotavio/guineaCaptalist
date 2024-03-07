@@ -56,11 +56,8 @@ const Home = () => {
             coins={coins}
             profileImage={require("../assets/gameImg/guineaProfile.jpg")}
             onSelectQuantity={handleSelectQuantity}
-            onPrestige={BusinessManager.resetarNegocios} // Corrigindo o nome da função
           />
-          <TouchableOpacity onPress={() => BusinessManager.resetarNegocios()}><Text>ajhsdjhqsdj</Text></TouchableOpacity>
           <ScrollView>
-            <Text>{value}</Text>
             {list.map((business, index) => (
               <BuyBusiness
                 key={index}

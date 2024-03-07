@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import QuantityButton from "./QuantityButton";
-import PrestigeButton from "./PrestigeButton";
 
 const separateNumberAndDefinition = (value: number): [string, string] => {
   if (value >= 1000000000000000) {
@@ -41,7 +40,6 @@ interface HeaderProps {
   profileImage: any;
   coins: number;
   onSelectQuantity: (quantity: string) => void;
-  onPrestige: () => void; // Adicionando onPrestige
 }
 
 
@@ -49,7 +47,6 @@ const CustomHeader: React.FC<HeaderProps> = ({
   profileImage,
   coins,
   onSelectQuantity,
-  onPrestige, // Adicionando onPrestige
 }) => {
   const handleSelectQuantity = (quantity: string) => {
     onSelectQuantity(quantity);
@@ -69,7 +66,6 @@ const CustomHeader: React.FC<HeaderProps> = ({
         </View>
       </View>
       <QuantityButton onSelectQuantity={onSelectQuantity} />
-      <PrestigeButton />
     </View>
   );
 };
