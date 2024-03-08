@@ -1,7 +1,7 @@
 // PlayerContext.tsx
 
 import React, { createContext, useContext, useMemo, useState } from "react";
-import BusinessManager from "./BusinessManager";
+import BusinessManager from "../gameComponents/BusinessManager";
 
 interface PlayerContextType {
   coins: number;

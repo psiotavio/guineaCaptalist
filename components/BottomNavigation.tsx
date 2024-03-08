@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Albums from "../pages/Albums";
 import Recents from "../pages/Recents";
 import Notifications from "../pages/Notifications";
+import { Easing } from "react-native";
 
 const MyDownTabs = () => {
   const [index, setIndex] = React.useState(0);
@@ -41,6 +42,8 @@ const MyDownTabs = () => {
 
   return (
     <BottomNavigation
+      sceneAnimationType="opacity"
+      shifting={true}
       barStyle={{ backgroundColor: backgroundColors[index] }} // Dynamically change the background color
       sceneAnimationEnabled={true}
       navigationState={{ index, routes }}

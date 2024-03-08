@@ -1,13 +1,41 @@
-import React, { useState } from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import PrestigeButton from "../components/PrestigeButton";
 import CustomHeader from "../components/CustomHeader";
-import { usePlayer } from "../components/gameComponents/PlayerContext";
+import { usePlayer } from "../components/Contexts/PlayerContext";
+import BusinessManagerPrestige from "../components/gameComponents/BusinessManagerPrestige";
+import BuyBusiness from "../components/BuyBusiness";
 
 const Albums = () => {
+  const [selectedQuantity, setSelectedQuantity] = useState("1x");
+  const [value, forceUpdate] = useState(0);
+
   const [isProgressBarActive, setIsProgressBarActive] = useState(false); // Estado para rastrear se a barra de progresso está ativa
   const { prestigeCoins, addPrestigeCoins } = usePlayer();
+
+
+
+  function update() {
+    console.log(`update`);
+    forceUpdate(new Date().getTime());
+    updateList(BusinessManagerPrestige.getTodosOsNegociosPrestige());
+  }
+
+  const [list, updateList] = useState(BusinessManagerPrestige.getTodosOsNegociosPrestige());
+
+  useEffect(() => {
+    BusinessManagerPrestige.addListener(update);
+    return () => {
+      BusinessManagerPrestige.removeListener(update);
+    };
+  }, []);
+
+
+  const handleSelectQuantity = (quantity: string) => {
+    setSelectedQuantity(quantity);
+  };
+
 
   const handleProgressBarPress = () => {
     if (!isProgressBarActive) {
@@ -31,9 +59,19 @@ const Albums = () => {
         <CustomHeader
           coins={prestigeCoins}
           profileImage={require("../assets/gameImg/guineaProfilePrestige.jpg")}
-          onSelectQuantity={() => {}}
+          onSelectQuantity={handleSelectQuantity}
           borderIconColor="#7D2929"
         />
+        <ScrollView>
+            {list.map((business, index) => (
+              <BuyBusiness
+                key={index}
+                business={business}
+                selectedQuantity={selectedQuantity}
+                playerCoins={prestigeCoins}
+              />
+            ))}
+          </ScrollView>
         <View style={styles.prestigeButton}>
           <PrestigeButton />
         </View>

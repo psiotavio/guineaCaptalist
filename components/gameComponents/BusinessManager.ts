@@ -64,10 +64,8 @@ interface BusinessState {
   }
 
   resetarNegocios(): void {
-    console.log("CHAMOU", this.initialBusinessList); // Adicionar este console.log
 
     this.listaNegocios = this.initialBusinessList.map(negocio => {
-      console.log(negocio)
       const negocioResetado = new Business(
         negocio.nome,
         negocio.custo,
@@ -78,7 +76,6 @@ interface BusinessState {
         0, // Resetando a quantidade para zero
         negocio.desbloqueado
         );
-        console.log(negocio)
       return negocioResetado;
     });
     this.notifyAll()

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
-import { usePlayer } from "./gameComponents/PlayerContext";
+import { usePlayer } from "./Contexts/PlayerContext";
 
 interface ProgressBarProps {
   duration: number;

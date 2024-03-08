@@ -1,5 +1,5 @@
 import React from "react";
-import { usePlayer } from "./gameComponents/PlayerContext";
+import { usePlayer } from "./Contexts/PlayerContext";
 import { TouchableOpacity, View, Text, StyleSheet} from "react-native";
 
 const PrestigeButton: React.FC = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
-import { usePlayer } from "./gameComponents/PlayerContext";
+import { usePlayer } from "./Contexts/PlayerContext";
 import BusinessManager from "./gameComponents/BusinessManager";
 import { Business } from "./gameComponents/Business";
 

@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import BuyBusiness from "../components/BuyBusiness";
-import { Business } from "../components/gameComponents/Business";
 import CustomHeader from "../components/CustomHeader";
-import { usePlayer } from "../components/gameComponents/PlayerContext";
+import { usePlayer } from "../components/Contexts/PlayerContext";
+import { useSound } from "../components/Contexts/AudioContext"; // Importe useSound
 import BusinessManager from "../components/gameComponents/BusinessManager";
 
 const Home = () => {
@@ -28,8 +28,6 @@ const Home = () => {
 
   useEffect(() => {
     BusinessManager.addListener(update);
-
-    // Cleanup para remover o ouvinte quando o componente for desmontado
     return () => {
       BusinessManager.removeListener(update);
     };
@@ -37,13 +35,6 @@ const Home = () => {
 
   const { coins, addCoins } = usePlayer();
 
-  useEffect(() => {
-    // Lógica para carregar os negócios, se necessário
-  }, []);
-
-  const handleBusinessPress = (business: Business) => {
-    console.log(`Negócio ${business.getNome()} pressionado`);
-  };
 
   const handleSelectQuantity = (quantity: string) => {
     setSelectedQuantity(quantity);
@@ -72,6 +63,7 @@ const Home = () => {
               />
             ))}
           </ScrollView>
+          
         </ImageBackground>
       </View>
     </SafeAreaProvider>
