@@ -1,12 +1,16 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Notifications = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <Text style={styles.text}>ABA 4</Text>
+      <ImageBackground
+          source={require("../assets/gameImg/background3.jpg")}
+          style={styles.image}
+        >
+      </ImageBackground>
       </View>
     </SafeAreaProvider>
   );
@@ -15,11 +19,10 @@ const Notifications = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    backgroundColor: 'yellow',
   },
-  text:{
-    textAlign:"center",
+  image: {
+    height: "100%",
+    objectFit: "cover",
   },
 });
 

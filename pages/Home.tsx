@@ -1,5 +1,12 @@
-import React, { useState, useEffect, } from "react";
-import { StyleSheet, View, ScrollView, ImageBackground, TouchableOpacity,Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  ImageBackground,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import BuyBusiness from "../components/BuyBusiness";
 import { Business } from "../components/gameComponents/Business";
@@ -12,26 +19,23 @@ const Home = () => {
   const [value, forceUpdate] = useState(0);
 
   function update() {
-    console.log(`update`)
-    forceUpdate(new Date().getTime())
-    updateList(BusinessManager.todosNegocios)
+    console.log(`update`);
+    forceUpdate(new Date().getTime());
+    updateList(BusinessManager.todosNegocios);
   }
 
   const [list, updateList] = useState(BusinessManager.todosNegocios);
 
-
   useEffect(() => {
     BusinessManager.addListener(update);
-    
+
     // Cleanup para remover o ouvinte quando o componente for desmontado
     return () => {
       BusinessManager.removeListener(update);
     };
   }, []);
-  
 
-  const { coins, addCoins, } = usePlayer();
-  
+  const { coins, addCoins } = usePlayer();
 
   useEffect(() => {
     // Lógica para carregar os negócios, se necessário
@@ -53,6 +57,7 @@ const Home = () => {
           style={styles.image}
         >
           <CustomHeader
+            borderIconColor="#233641"
             coins={coins}
             profileImage={require("../assets/gameImg/guineaProfile.jpg")}
             onSelectQuantity={handleSelectQuantity}

@@ -37,6 +37,7 @@ const separateNumberAndDefinition = (value: number): [string, string] => {
 };
 
 interface HeaderProps {
+  borderIconColor: string;
   profileImage: any;
   coins: number;
   onSelectQuantity: (quantity: string) => void;
@@ -47,6 +48,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
   profileImage,
   coins,
   onSelectQuantity,
+  borderIconColor,
 }) => {
   const handleSelectQuantity = (quantity: string) => {
     onSelectQuantity(quantity);
@@ -58,7 +60,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
     <View style={styles.container}>
       <View style={styles.player}>
         <View style={styles.profileImageShadow}>
-          <Image source={profileImage} style={styles.profileImage} />
+          <Image source={profileImage} style={[styles.profileImage, {borderColor: borderIconColor}]} />
         </View>
         <View style={styles.priceContainer}>
           <Text style={styles.valueText}>${formattedValue}</Text>
@@ -85,7 +87,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginRight: 12,
     borderWidth: 4,
-    borderColor: "#233641",
   },
   profileImageShadow: {
     width: 85,

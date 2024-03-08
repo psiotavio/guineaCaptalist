@@ -28,6 +28,10 @@ const MyDownTabs = () => {
     },
   ]);
 
+  // Define background colors for each index
+  const backgroundColors = ["#1A3D54", "#6B2737", "#14563a"];
+  const backgroundColorsActive = ["#8BAFC7", "#964354", "#1f7f5a"];
+
   const renderScene = BottomNavigation.SceneMap({
     home: Home,
     albums: Albums,
@@ -37,23 +41,23 @@ const MyDownTabs = () => {
 
   return (
     <BottomNavigation
-      barStyle={{ backgroundColor: "#0F2E40" }}
+      barStyle={{ backgroundColor: backgroundColors[index] }} // Dynamically change the background color
       sceneAnimationEnabled={true}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
       activeColor="white"
       inactiveColor="lightgrey"
-      safeAreaInsets={{ bottom: 15 }}
+      safeAreaInsets={{ bottom: 10 }}
       activeIndicatorStyle={{
-        backgroundColor: "#94AFBF",
+        backgroundColor: backgroundColorsActive[index],
         shadowColor: "black",
         shadowRadius: 4,
         shadowOpacity: 0.5,
         shadowOffset: { width: 0, height: 0 },
         opacity: 0.5,
         padding: 72,
-        borderRadius: 0
+        borderRadius: 0,
       }}
     />
   );

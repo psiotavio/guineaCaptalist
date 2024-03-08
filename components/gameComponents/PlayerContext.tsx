@@ -5,8 +5,11 @@ import BusinessManager from "./BusinessManager";
 
 interface PlayerContextType {
   coins: number;
+  prestigeCoins: number;
   addCoins: (amount: number) => void;
   removeCoins: (amount: number) => void;
+  addPrestigeCoins: (amount: number) => void;
+  removePrestigeCoins: (amount: number) => void;
   prestige: () => void;
 }
 
@@ -22,6 +25,7 @@ export const usePlayer = () => {
 
 export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [coins, setCoins] = useState(0);
+  const [prestigeCoins, setPrestigeCoins] = useState(0);
   const [, forceUpdate] = useState(0);
   const newListener = () => {
     forceUpdate(prev => prev + 1);
@@ -39,11 +43,24 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  const addPrestigeCoins = (amount: number) => {
+    setPrestigeCoins((prevCoins) => prevCoins + amount);
+  };
+
+  const removePrestigeCoins = (amount: number) => {
+    if (prestigeCoins >= amount) {
+      setPrestigeCoins((prevCoins) => prevCoins - amount);
+    } else {
+      console.log("Not enough coins!");
+    }
+  };
+
   const prestige = () => {
-    const coinsSpent = coins * 0.2;
     const coinsRemaining = coins * 0.1;
-  
+    const prestigeCoinsAmount = coins * 0.002;
+    
     setCoins(coinsRemaining);
+    setPrestigeCoins(prestigeCoins + prestigeCoinsAmount)
   
     // Reiniciar todos os negócios para valores iniciais
     BusinessManager.resetarNegocios()
@@ -63,6 +80,9 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     addCoins,
     removeCoins,
     prestige,
+    prestigeCoins,
+    addPrestigeCoins,
+    removePrestigeCoins,
   };
 
   return (
