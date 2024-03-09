@@ -1,10 +1,12 @@
-// SoundProvider.tsx
+// AudioContext.tsx
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { Audio } from 'expo-av';
 
 interface SoundContextProps {
   playSound: () => Promise<void>;
   stopSound: () => Promise<void>;
+  isSoundPlaying: boolean;
+  setVolume: (volume: number) => Promise<void>;
 }
 
 const SoundContext = createContext<SoundContextProps | null>(null);
@@ -23,6 +25,8 @@ interface SoundProviderProps {
 
 export const SoundProvider = ({ children }: SoundProviderProps) => {
   const [backgroundSound, setBackgroundSound] = useState<Audio.Sound | null>(null);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+  const [volume, setVolume] = useState(1.0);
 
   useEffect(() => {
     let sound: Audio.Sound | null = new Audio.Sound();
@@ -31,6 +35,7 @@ export const SoundProvider = ({ children }: SoundProviderProps) => {
       try {
         await sound!.loadAsync(require('../../assets/sounds/gameMusic.mp3'));
         await sound!.setIsLoopingAsync(true);
+        await sound!.setVolumeAsync(volume); // Definindo o volume inicial
       } catch (error) {
         console.error('Erro ao carregar o som:', error);
       }
@@ -54,6 +59,7 @@ export const SoundProvider = ({ children }: SoundProviderProps) => {
       await backgroundSound.playAsync().catch(error => {
         console.error('Erro ao reproduzir o som:', error);
       });
+      setIsSoundPlaying(true);
     }
   };
 
@@ -62,12 +68,24 @@ export const SoundProvider = ({ children }: SoundProviderProps) => {
       await backgroundSound.stopAsync().catch(error => {
         console.error('Erro ao parar o som:', error);
       });
+      setIsSoundPlaying(false);
+    }
+  };
+
+  const updateVolume = async (volume: number) => {
+    if (backgroundSound) {
+      await backgroundSound.setVolumeAsync(volume).catch(error => {
+        console.error('Erro ao definir o volume:', error);
+      });
+      setVolume(volume);
     }
   };
 
   const contextValue: SoundContextProps = {
     playSound,
-    stopSound
+    stopSound,
+    isSoundPlaying,
+    setVolume: updateVolume,
   };
 
   return (

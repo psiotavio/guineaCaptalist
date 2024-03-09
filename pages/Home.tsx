@@ -15,6 +15,14 @@ import { useSound } from "../components/Contexts/AudioContext"; // Importe useSo
 import BusinessManager from "../components/gameComponents/BusinessManager";
 
 const Home = () => {
+
+  // const { playSound, stopSound } = useSound(); // Use useSound aqui
+
+  // useEffect(() => {
+  //   // Reproduz o som ao entrar na aba de Notificações
+  //   playSound();
+  // }, []); // Execute somente uma vez, quando o componente é montado
+  
   const [selectedQuantity, setSelectedQuantity] = useState("1x");
   const [value, forceUpdate] = useState(0);
 
