@@ -16,12 +16,21 @@ import BusinessManager from "../components/gameComponents/BusinessManager";
 
 const Home = () => {
 
-  // const { playSound, stopSound } = useSound(); // Use useSound aqui
+  const { playSound } = useSound();
+  const [isSoundPlayed, setIsSoundPlayed] = useState(false);
 
-  // useEffect(() => {
-  //   // Reproduz o som ao entrar na aba de Notificações
-  //   playSound();
-  // }, []); // Execute somente uma vez, quando o componente é montado
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isSoundPlayed) {
+        playSound();
+        setIsSoundPlayed(false);
+      }
+    }, 1000); // Atraso de 1 segundo
+  
+    return () => clearTimeout(timeout); // Limpar o timeout se o componente for desmontado antes do tempo limite
+  }, [isSoundPlayed]);
+  
+
   
   const [selectedQuantity, setSelectedQuantity] = useState("1x");
   const [value, forceUpdate] = useState(0);
