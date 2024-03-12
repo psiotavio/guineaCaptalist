@@ -8,6 +8,7 @@ export class Business {
   public imagem: string;
   public quantidade: number; 
   public desbloqueado: boolean; 
+  public automatic: boolean;
 
   constructor(
     id: number,
@@ -19,6 +20,7 @@ export class Business {
     imagem: string,
     quantidade: number, 
     desbloqueado: boolean,
+    automatic: boolean,
   ) {
     this.id = id;
     this.nome = nome;
@@ -29,6 +31,7 @@ export class Business {
     this.imagem = imagem;
     this.quantidade = quantidade; // Inicializando a quantidade
     this.desbloqueado = desbloqueado; // Inicializando o status de desbloqueio
+    this.automatic = automatic
   }
 
   clone(): Business {
@@ -41,7 +44,8 @@ export class Business {
       this.tempoProducao,
       this.imagem,
       this.quantidade,
-      this.desbloqueado
+      this.desbloqueado,
+      this.automatic
     );
   }
 
@@ -50,6 +54,13 @@ export class Business {
     return this.desbloqueado;
   }
 
+  getAutomatic(): boolean {
+    return this.automatic;
+  }
+
+  setAutomatic(automatic: boolean): void {
+    this.automatic = automatic;
+  }
   setDesbloqueado(desbloqueado: boolean): void {
     this.desbloqueado = desbloqueado;
   }

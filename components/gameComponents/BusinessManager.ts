@@ -1,6 +1,7 @@
 import { Business } from "./Business";
 
 interface BusinessState {
+  id: number;
   nome: string;
   custo: number;
   lucro: number;
@@ -66,6 +67,12 @@ interface BusinessState {
     this.initialBusinessList.push(negocio); // Adiciona o negócio à lista inicial
   }
 
+    // Método para adicionar um novo negócio à lista
+    AutomaticTrue(negocio: string): void {
+      this.getNegocio(negocio)?.setAutomatic(true);
+      this.notifyAll();
+    }
+
   resetarNegocios(): void {
 
     this.listaNegocios = this.initialBusinessList.map(negocio => {
@@ -90,7 +97,6 @@ interface BusinessState {
     const negocioUpdate = this.getNegocio(negocio);
     negocioUpdate?.setCusto(coin)
   }
-
 
   atualizarQuantidade(nome: string, novaQuantidade: number): void {
     const negocio = this.listaNegocios.find((n) => n.getNome() === nome);
@@ -124,8 +130,10 @@ interface BusinessState {
 
   // Método para obter um negócio da lista pelo nome
   getNegocio(nome: string): Business | undefined {
-    return this.listaNegocios.find((n) => n.getNome() === nome);
+    const negocioEncontrado = this.listaNegocios.find((n) => n.getNome() === nome);
+    return negocioEncontrado ? negocioEncontrado : undefined;
   }
+  
 
   // Atualize a assinatura da função getTodosNegocios() para retornar Business[]
 getTodosNegocios(tempoDecorrido: number): Business[] {

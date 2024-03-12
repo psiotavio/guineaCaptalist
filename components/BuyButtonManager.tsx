@@ -3,15 +3,15 @@ import { TouchableOpacity, View, Text, StyleSheet, Image } from "react-native";
 import { usePlayer } from "./Contexts/PlayerContext";
 import BusinessManager from "./gameComponents/BusinessManager";
 import { Business } from "./gameComponents/Business";
+import { BusinessPrestige } from "./gameComponents/BusinessPrestige";
+import BusinessManagerPrestige from "./gameComponents/BusinessManagerPrestige";
 
 interface BuyButtonManagerProps {
   image: any;
-  quantity: string;
   coins: number; // Moedas disponíveis do jogador
-  initialItemCost: () => number; // Função para calcular o custo inicial do item
-  increaseQuantity: () => void; // Função para aumentar a quantidade de itens
+  itemCost: number; // Função para calcular o custo inicial do item
   additionalText?: string; // Texto adicional opcional para o estilo 2
-  business: Business;
+  business: BusinessPrestige;
   style?: number
 }
 
@@ -34,38 +34,22 @@ const formatNumber = (value: number): string => {
 const BuyButtonManager: React.FC<BuyButtonManagerProps> = ({
   style,
   image,
-  quantity,
   coins,
-  initialItemCost,
-  increaseQuantity,
   additionalText,
+  itemCost,
   business,
 }) => {
-  const [itemCost, setItemCost] = useState(initialItemCost());
   const { removePrestigeCoins } = usePlayer();
 
-  useEffect(() => {
-    // Atualiza o custo do item sempre que os valores dos negócios mudarem
-    setItemCost(initialItemCost());
-  }, [business]);
-
-  const calculateTotalCost = (
-    quantity: string
-  ): { totalCost: number; numItems: number } => {
-    let numItems = parseInt(quantity, 10);
-    // Calcula o custo total com base na quantidade de itens
-    let totalCost = numItems * itemCost;
-    return { totalCost, numItems };
-  };
-
-  const { totalCost, numItems } = calculateTotalCost(quantity);
 
   const handlePress = () => {
-    removePrestigeCoins(totalCost);
-    increaseQuantity(); 
+    BusinessManagerPrestige.setAuto(business.getBusinessAlvo()!);
+    console.log(BusinessManager.getNegocio(business.getBusinessAlvo()!.getNome())!.getAutomatic());
+    business.setDesbloqueado(true);
+    removePrestigeCoins(itemCost);
   };
 
-  const formattedCost = formatNumber(totalCost);
+  const formattedCost = formatNumber(itemCost);
 
 
   if (style === 2) {
@@ -81,11 +65,11 @@ const BuyButtonManager: React.FC<BuyButtonManagerProps> = ({
   }
 
 
-  else return coins >= totalCost ? (
+  else return coins >= itemCost ? (
     <TouchableOpacity
       style={styles.button}
       onPress={handlePress}
-      disabled={coins < totalCost}
+      disabled={coins < itemCost}
     >
       <Image source={image} style={styles.image} />
       <Text style={styles.buttonText}>{additionalText}</Text>

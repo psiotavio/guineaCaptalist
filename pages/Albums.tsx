@@ -25,12 +25,7 @@ const Albums = () => {
 
   const [list, updateList] = useState(BusinessManagerPrestige.getTodosOsNegociosPrestige());
 
-  useEffect(() => {
-    BusinessManagerPrestige.addListener(update);
-    return () => {
-      BusinessManagerPrestige.removeListener(update);
-    };
-  }, []);
+
 
 
   const handleSelectQuantity = (quantity: string) => {
@@ -68,7 +63,6 @@ const Albums = () => {
               <BuyBusinessPrestige
                 key={index}
                 business={business}
-                selectedQuantity={selectedQuantity} 
                 playerPrestigeCoins={prestigeCoins}             
                  />
             ))}

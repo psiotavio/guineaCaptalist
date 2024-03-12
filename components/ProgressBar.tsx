@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import { usePlayer } from "./Contexts/PlayerContext";
+import { Business } from "./gameComponents/Business";
 
 interface ProgressBarProps {
   duration: number;
   lucro: number;
+  business: Business;
 }
 
 const separateNumberAndDefinition = (value: number): [string, string] => {
@@ -45,6 +47,7 @@ const separateNumberAndDefinition = (value: number): [string, string] => {
 const ProgressBarComponent: React.FC<ProgressBarProps> = ({
   duration,
   lucro,
+  business,
 }) => {
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(
@@ -56,9 +59,30 @@ const ProgressBarComponent: React.FC<ProgressBarProps> = ({
   const { coins, addCoins, removeCoins } = usePlayer();
 
   const handlePress = () => {
+    console.log(business)
     if (!canPress) return; // Não permite clicar se canPress for false
     setPressed(!pressed);
   };
+
+// Dentro do useEffect onde você monitora o timer
+useEffect(() => {
+  if (timer === 0) {
+    addCoins(lucro);
+    setPressed(false);
+    setCanPress(true); // Permite o botão ser pressionado novamente quando o timer chegar a 0
+    setProgress(0); // Reseta o progresso
+    clearInterval(intervalId); // Limpa o intervalo para parar de atualizar o timer
+
+    // Verifica se o business é automático antes de simular o clique
+    if (business.getAutomatic()) {
+      // Simula o clique automaticamente
+      setTimeout(() => {
+        setPressed(true);
+      }, 1000); // Adicione um pequeno atraso para garantir que o clique ocorra após o intervalo de atualização do progresso
+    }
+  }
+}, [timer]);
+
 
   useEffect(() => {
     if (pressed) {
@@ -87,7 +111,6 @@ const ProgressBarComponent: React.FC<ProgressBarProps> = ({
 
   useEffect(() => {
     if (timer === 0) {
-      addCoins(lucro);
       setPressed(false);
       setCanPress(true); // Permite o botão ser pressionado novamente quando o timer chegar a 0
     }

@@ -52,6 +52,7 @@ const BuyBusiness: React.FC<BuyBusinessProps> = ({
           <StoreItem image={business.imagem}></StoreItem>
           <View style={styles.secondSection}>
             <ProgressBarComponent
+              business={business}
               lucro={itemLucro}
               duration={business.tempoProducao}
             />

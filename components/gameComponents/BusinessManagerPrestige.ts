@@ -1,65 +1,67 @@
+// BusinessManagerPrestige.ts
 import { Business } from "./Business";
-
-interface BusinessManagerState {
-  nome: string;
-  custo: number;
-  lucro: number;
-  nivelEficiencia: number;
-  tempoProducao: number;
-  lucroAtual: number;
-  quantidade: number; // Adiciona a quantidade de itens
-  desbloqueado: boolean; // Adiciona o status de desbloqueio
-}
+import BusinessManager from "./BusinessManager";
+import { BusinessPrestige } from "./BusinessPrestige";
 
 class BusinessManagerPrestige {
-  public businessPrestigeList: Business[] = [];
-  public initialBusinessPrestigeList: Business[] = [
-    new Business(1,"Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true, false),
-    new Business(2,"Guinea Cops", 300, 10000, 5, 120, require("../../assets/gameImg/guinea2.png"), 0, false, false),
-    new Business(3,"Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false, false),
+  public businessPrestigeList: BusinessPrestige[] = [];
+  public initialBusinessPrestigeList: BusinessPrestige[] = [
+     new BusinessPrestige(1, "Classic Guinea", 100, require("../../assets/gameImg/guinea1.png"), BusinessManager.getNegocio("Classic Guinea")!, false),
+      
   ];
-  private listeners: (() => void )[] = [];
+
+
+
+
+  private listeners: (() => void)[] = [];
+
+  addListener(listener: () => void){
+    this.listeners.push(listener);
+  }
+
+  removeListener(listener: () => void) {
+    this.listeners = this.listeners.filter((l) => l !== listener);
+  }
+
+
+
+  notifyAll() {
+    this.listeners.forEach((listener) => listener());
+  }
 
   constructor() {
     this.resetPrestigeBusinesses();
   }
 
-  // Adiciona um listener para notificar mudanças
-  addListener(listener: () => void): void {
-    this.listeners.push(listener);
-  }
-
-  // Remove um listener
-  removeListener(listener: () => void): void {
-    this.listeners = this.listeners.filter((l) => l !== listener);
-  }
-
-  // Notifica todos os listeners
-  notifyAll(): void {
-    this.listeners.forEach((listener) => listener());
-  }
+  // Métodos addListener, removeListener e notifyAll permanecem iguais
 
   // Retorna todos os negócios de prestígio
-  getTodosOsNegociosPrestige(): Business[] {
+  getTodosOsNegociosPrestige(): BusinessPrestige[] {
     return this.businessPrestigeList.map((business) => {
-      // Cria um novo objeto Business com os mesmos dados do BusinessState
-      return new Business(
+      // Cria um novo objeto BusinessPrestige com os mesmos dados do BusinessPrestige
+      return new BusinessPrestige(
         business.id,
         business.nome,
-        business.custo,
-        business.lucro,
-        business.nivelEficiencia,
-        business.tempoProducao,
+        business.valor,
         business.imagem,
-        business.quantidade,
-        business.desbloqueado,
-        business.automatic
+        business.businessAlvo!,
+        business.desbloqueado
       );
     });
   }
 
+  setAuto(business: Business) {
+    BusinessManager.AutomaticTrue(business.getNome())
+    this.notifyAll()
+
+  }
+  
+  getNegocio(nome: string): Business | undefined {
+    return BusinessManager.todosNegocios.find((n) => n.getNome() === nome);
+  }
+
   // Adiciona um novo negócio de prestígio à lista
-  adicionarNegocioPrestige(negocio: Business): void {
+  adicionarNegocioPrestige(negocio: BusinessPrestige): void {
     this.businessPrestigeList.push(negocio);
     this.initialBusinessPrestigeList.push(negocio); // Adiciona o negócio à lista inicial
   }
@@ -68,23 +70,17 @@ class BusinessManagerPrestige {
   resetPrestigeBusinesses(): void {
     this.businessPrestigeList = this.initialBusinessPrestigeList.map((business) => {
       // Reseta a quantidade para zero
-      return new Business(
+      return new BusinessPrestige(
         business.id,
         business.nome,
-        business.custo,
-        business.lucro,
-        business.nivelEficiencia,
-        business.tempoProducao,
+        business.valor,
         business.imagem,
-        0,
-        business.desbloqueado,
-        business.automatic
+        business.businessAlvo!,
+        business.desbloqueado
       );
     });
-    this.notifyAll();
+    this.notifyAll()
   }
-
-  // Outros métodos para atualizar, remover e gerenciar negócios de prestígio podem ser adicionados conforme necessário
 }
 
 export default new BusinessManagerPrestige();
