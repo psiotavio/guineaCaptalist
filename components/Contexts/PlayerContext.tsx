@@ -25,7 +25,7 @@ export const usePlayer = () => {
 
 export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [coins, setCoins] = useState(0);
-  const [prestigeCoins, setPrestigeCoins] = useState(0);
+  const [prestigeCoins, setPrestigeCoins] = useState(400);
   const [, forceUpdate] = useState(0);
   const newListener = () => {
     forceUpdate(prev => prev + 1);

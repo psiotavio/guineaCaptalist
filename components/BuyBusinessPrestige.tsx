@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Business } from "../components/gameComponents/Business";
 import StoreItem from "./StoreIcon";
-import BuyButton from "./BuyButton";
-import ProgressBarComponent from "./ProgressBar";
+import BuyButtonManager from "./BuyButtonManager";
 
 interface BuyBusinessPrestigeProps {
   business: Business;
@@ -49,35 +48,32 @@ const BuyBusinessPrestige: React.FC<BuyBusinessPrestigeProps> = ({
     <>
       {business.desbloqueado ? (
         <View style={styles.container}>
-          <StoreItem image={business.imagem}></StoreItem>
-          <View style={styles.secondSection}>
-            <ProgressBarComponent
-              lucro={itemLucro}
-              duration={business.tempoProducao}
+          <View style={styles.buyManager}>
+            <BuyButtonManager
+              image={business.imagem}
+              quantity={selectedQuantity}
+              coins={playerPrestigeCoins}
+              initialItemCost={() => business.custo}
+              additionalText={business.getNome()}
+              style={2}
+              increaseQuantity={increaseQuantity}
+              business={business}
             />
-            <View style={styles.thirdSection}>
-              <BuyButton
-                quantity={selectedQuantity}
-                coins={playerPrestigeCoins}
-                initialItemCost={() => business.custo}
-                increaseQuantity={increaseQuantity}
-                style={1}
-                business={business}
-              />
-            </View>
           </View>
         </View>
       ) : (
-        <View style={[styles.containerBlocked]}>
-            <BuyButton
-                quantity={selectedQuantity}
-                coins={playerPrestigeCoins}
-                initialItemCost={() => business.custo}
-                increaseQuantity={increaseQuantity}
-                additionalText={business.getNome()}
-                style={2}
-                business={business}
-              />
+        <View style={styles.container}>
+          <View style={styles.buyManager}>
+            <BuyButtonManager
+              image={business.imagem}
+              quantity={selectedQuantity}
+              coins={playerPrestigeCoins}
+              initialItemCost={() => business.custo}
+              increaseQuantity={increaseQuantity}
+              additionalText={business.getNome()}
+              business={business}
+            />
+          </View>
         </View>
       )}
     </>
@@ -93,10 +89,11 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingHorizontal: 30,
+    paddingVertical: 5,
     borderRadius: 5,
     gap: 5,
+    marginTop: 10,
   },
   containerBlocked: {
     display: "flex",
@@ -120,6 +117,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
+  },
+  buyManager: {
+    display: "flex",
+    alignItems: "center",
   },
 });
 

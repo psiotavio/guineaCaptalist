@@ -14,8 +14,9 @@ interface BusinessManagerState {
 class BusinessManagerPrestige {
   public businessPrestigeList: Business[] = [];
   public initialBusinessPrestigeList: Business[] = [
-    new Business("Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true),
-    new Business("Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false),
+    new Business(1,"Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true, false),
+    new Business(2,"Guinea Cops", 300, 10000, 5, 120, require("../../assets/gameImg/guinea2.png"), 0, false, false),
+    new Business(3,"Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false, false),
   ];
   private listeners: (() => void )[] = [];
 
@@ -43,6 +44,7 @@ class BusinessManagerPrestige {
     return this.businessPrestigeList.map((business) => {
       // Cria um novo objeto Business com os mesmos dados do BusinessState
       return new Business(
+        business.id,
         business.nome,
         business.custo,
         business.lucro,
@@ -50,7 +52,8 @@ class BusinessManagerPrestige {
         business.tempoProducao,
         business.imagem,
         business.quantidade,
-        business.desbloqueado
+        business.desbloqueado,
+        business.automatic
       );
     });
   }
@@ -66,6 +69,7 @@ class BusinessManagerPrestige {
     this.businessPrestigeList = this.initialBusinessPrestigeList.map((business) => {
       // Reseta a quantidade para zero
       return new Business(
+        business.id,
         business.nome,
         business.custo,
         business.lucro,
@@ -73,7 +77,8 @@ class BusinessManagerPrestige {
         business.tempoProducao,
         business.imagem,
         0,
-        business.desbloqueado
+        business.desbloqueado,
+        business.automatic
       );
     });
     this.notifyAll();

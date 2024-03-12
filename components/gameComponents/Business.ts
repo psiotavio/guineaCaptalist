@@ -1,4 +1,5 @@
 export class Business {
+  public id: number;
   public nome: string;
   public custo: number;
   public lucro: number;
@@ -9,6 +10,7 @@ export class Business {
   public desbloqueado: boolean; 
 
   constructor(
+    id: number,
     nome: string,
     custo: number,
     lucro: number,
@@ -18,6 +20,7 @@ export class Business {
     quantidade: number, 
     desbloqueado: boolean,
   ) {
+    this.id = id;
     this.nome = nome;
     this.custo = custo;
     this.lucro = lucro;
@@ -30,6 +33,7 @@ export class Business {
 
   clone(): Business {
     return new Business(
+      this.id,
       this.nome,
       this.custo,
       this.lucro,

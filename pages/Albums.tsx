@@ -6,6 +6,7 @@ import CustomHeader from "../components/CustomHeader";
 import { usePlayer } from "../components/Contexts/PlayerContext";
 import BusinessManagerPrestige from "../components/gameComponents/BusinessManagerPrestige";
 import BuyBusiness from "../components/BuyBusiness";
+import BuyBusinessPrestige from "../components/BuyBusinessPrestige";
 
 const Albums = () => {
   const [selectedQuantity, setSelectedQuantity] = useState("1x");
@@ -64,12 +65,12 @@ const Albums = () => {
         />
         <ScrollView>
             {list.map((business, index) => (
-              <BuyBusiness
+              <BuyBusinessPrestige
                 key={index}
                 business={business}
-                selectedQuantity={selectedQuantity}
-                playerCoins={prestigeCoins}
-              />
+                selectedQuantity={selectedQuantity} 
+                playerPrestigeCoins={prestigeCoins}             
+                 />
             ))}
           </ScrollView>
         <View style={styles.prestigeButton}>

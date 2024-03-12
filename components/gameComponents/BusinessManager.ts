@@ -9,16 +9,17 @@ interface BusinessState {
   lucroAtual: number;
   quantidade: number; // Adiciona a quantidade de itens
   desbloqueado: boolean; // Adiciona o status de desbloqueio
+  automatic: boolean;
 }
 
  class BusinessManager {
   public listaNegocios: Business[] = [];
   public initialBusinessList: Business[] = [
-    new Business("Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true),
-    new Business("Guinea Cops", 200, 500, 2, 10, require("../../assets/gameImg/guinea2.png"), 0, false),
-    new Business("Chef MR. Guinea", 300, 1000, 3, 30, require("../../assets/gameImg/guinea3.png"), 0, false),
-    new Business("Guinea Dev.", 400, 5000, 4, 60, require("../../assets/gameImg/guinea4.png"), 0, false),
-    new Business("Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false),
+    new Business(1,"Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true, false),
+    new Business(2,"Guinea Cops", 200, 500, 2, 10, require("../../assets/gameImg/guinea2.png"), 0, false,false),
+    new Business(3,"Chef MR. Guinea", 300, 1000, 3, 30, require("../../assets/gameImg/guinea3.png"), 0, false,false),
+    new Business(4,"Guinea Dev.", 400, 5000, 4, 60, require("../../assets/gameImg/guinea4.png"), 0, false,false),
+    new Business(5,"Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false,false),
   ];
   private listeners: (() => void )[] = [];
 
@@ -45,6 +46,7 @@ interface BusinessState {
       const desbloqueado = negocio.getDesbloqueado();
       // Aqui estamos criando um novo objeto Business com os mesmos dados do BusinessState
       return new Business(
+        negocio.id,
         negocio.nome,
         negocio.custo,
         negocio.lucro,
@@ -52,7 +54,8 @@ interface BusinessState {
         negocio.tempoProducao,
         negocio.imagem,
         negocio.quantidade,
-        negocio.desbloqueado
+        negocio.desbloqueado,
+        negocio.automatic
       );
     });
   }
@@ -67,6 +70,7 @@ interface BusinessState {
 
     this.listaNegocios = this.initialBusinessList.map(negocio => {
       const negocioResetado = new Business(
+        negocio.id,
         negocio.nome,
         negocio.custo,
         negocio.lucro,
@@ -74,7 +78,8 @@ interface BusinessState {
         negocio.tempoProducao,
         negocio.imagem,
         0, // Resetando a quantidade para zero
-        negocio.desbloqueado
+        negocio.desbloqueado,
+        negocio.automatic,
         );
       return negocioResetado;
     });
@@ -129,6 +134,7 @@ getTodosNegocios(tempoDecorrido: number): Business[] {
     const desbloqueado = negocio.getDesbloqueado();
     // Aqui estamos criando um novo objeto Business com os mesmos dados do BusinessState
     return new Business(
+      negocio.id,
       negocio.nome,
       negocio.custo,
       negocio.lucro,
@@ -136,7 +142,8 @@ getTodosNegocios(tempoDecorrido: number): Business[] {
       negocio.tempoProducao,
       negocio.imagem,
       negocio.quantidade,
-      negocio.desbloqueado
+      negocio.desbloqueado,
+      negocio.automatic
     );
   });
 }
