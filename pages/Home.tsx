@@ -21,6 +21,7 @@ const Home = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      setIsSoundPlayed(true);
       if (isSoundPlayed) {
         playSound();
         setIsSoundPlayed(false);
@@ -29,6 +30,9 @@ const Home = () => {
   
     return () => clearTimeout(timeout); // Limpar o timeout se o componente for desmontado antes do tempo limite
   }, [isSoundPlayed]);
+
+ 
+  
   
 
   
@@ -36,7 +40,6 @@ const Home = () => {
   const [value, forceUpdate] = useState(0);
 
   function update() {
-    console.log(`update`);
     forceUpdate(new Date().getTime());
     updateList(BusinessManager.todosNegocios);
   }

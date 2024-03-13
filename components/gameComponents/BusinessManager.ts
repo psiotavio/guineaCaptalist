@@ -16,11 +16,11 @@ interface BusinessState {
  class BusinessManager {
   public listaNegocios: Business[] = [];
   public initialBusinessList: Business[] = [
-    new Business(1,"Classic Guinea", 100, 100, 1, 2, require("../../assets/gameImg/guinea1.png"), 0, true, false),
-    new Business(2,"Guinea Cops", 200, 500, 2, 10, require("../../assets/gameImg/guinea2.png"), 0, false,false),
-    new Business(3,"Chef MR. Guinea", 300, 1000, 3, 30, require("../../assets/gameImg/guinea3.png"), 0, false,false),
-    new Business(4,"Guinea Dev.", 400, 5000, 4, 60, require("../../assets/gameImg/guinea4.png"), 0, false,false),
-    new Business(5,"Guinea Nerd", 500, 10000, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false,false),
+    new Business(1,"Classic Guinea", 50, 5, 1, 4, require("../../assets/gameImg/guinea1.png"), 0, true, false),
+    new Business(2,"Guinea Cops", 200, 20, 2, 10, require("../../assets/gameImg/guinea2.png"), 0, false,false),
+    new Business(3,"Chef MR. Guinea", 500, 100, 3, 30, require("../../assets/gameImg/guinea3.png"), 0, false,false),
+    new Business(4,"Guinea Dev.", 1000, 200, 4, 60, require("../../assets/gameImg/guinea4.png"), 0, false,false),
+    new Business(5,"Guinea Nerd", 2500, 500, 5, 120, require("../../assets/gameImg/guinea5.png"), 0, false,false),
   ];
   private listeners: (() => void )[] = [];
 

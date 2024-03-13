@@ -6,11 +6,11 @@ import { BusinessPrestige } from "./BusinessPrestige";
 class BusinessManagerPrestige {
   public businessPrestigeList: BusinessPrestige[] = [];
   public initialBusinessPrestigeList: BusinessPrestige[] = [
-     new BusinessPrestige(1, "Classic Guinea", 100, require("../../assets/gameImg/guinea1.png"), BusinessManager.getNegocio("Classic Guinea")!, false),
+     new BusinessPrestige(1, "Classic Guinea Manager", 100, require("../../assets/gameImg/guineaManagers/guineaManager1.png"), BusinessManager.getNegocio("Classic Guinea")!, false),
+     new BusinessPrestige(1, "Rich Guinea Manager", 300, require("../../assets/gameImg/guineaManagers/guineaManager2.png"), BusinessManager.getNegocio("Classic Guinea")!, false),
+     new BusinessPrestige(1, "Rich Guinea Manager", 500, require("../../assets/gameImg/guineaManagers/guineaManager3.png"), BusinessManager.getNegocio("Classic Guinea")!, false),
       
   ];
-
-
 
 
   private listeners: (() => void)[] = [];
@@ -22,7 +22,6 @@ class BusinessManagerPrestige {
   removeListener(listener: () => void) {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
-
 
 
   notifyAll() {
