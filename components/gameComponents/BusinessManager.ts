@@ -133,6 +133,11 @@ interface BusinessState {
     const negocioEncontrado = this.listaNegocios.find((n) => n.getNome() === nome);
     return negocioEncontrado ? negocioEncontrado : undefined;
   }
+  // Método para obter um negócio da lista pelo nome
+  getNegocioByID(id: number): Business | undefined {
+    const negocioEncontrado = this.listaNegocios.find((n) => n.getId() === id);
+    return negocioEncontrado ? negocioEncontrado : undefined;
+  }
   
 
   // Atualize a assinatura da função getTodosNegocios() para retornar Business[]

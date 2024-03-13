@@ -80,6 +80,10 @@ export class Business {
     this.lucro = this.lucro * Math.pow(1.1, this.quantidade);
   }
 
+  getId(): number {
+    return this.id
+  }
+
   getNome(): string {
     return this.nome;
   }
@@ -116,6 +120,8 @@ export class Business {
   atualizarEficiencia(novaEficiencia: number): void {
     this.nivelEficiencia = novaEficiencia;
   }
+
+
 
   calcularLucro(tempoDecorrido: number): number {
     if (tempoDecorrido >= this.tempoProducao) {
