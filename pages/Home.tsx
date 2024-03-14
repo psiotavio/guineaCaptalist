@@ -45,6 +45,7 @@ const Home = () => {
   }
 
   const [list, updateList] = useState(BusinessManager.todosNegocios);
+  const [negociosCarregados, setNegociosCarregados] = useState(false); // Estado para controlar se os negócios foram carregados com sucesso
 
   useEffect(() => {
     BusinessManager.addListener(update);
@@ -53,12 +54,29 @@ const Home = () => {
     };
   }, []);
 
+
+  useEffect(() => {
+    const carregarDados = async () => {
+      await BusinessManager.carregarNegocios();
+      updateList(BusinessManager.todosNegocios);
+      setNegociosCarregados(true);
+    };
+
+    carregarDados();
+  }, []);
+
+
   const { coins, addCoins } = usePlayer();
 
 
   const handleSelectQuantity = (quantity: string) => {
     setSelectedQuantity(quantity);
   };
+
+  if (!negociosCarregados) {
+    // Renderizar alguma tela de carregamento enquanto os negócios estão sendo carregados
+    return <View><Text>Carregando negócios...</Text></View>;
+  }
 
   return (
     <SafeAreaProvider>

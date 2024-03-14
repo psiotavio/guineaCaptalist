@@ -1,6 +1,9 @@
 import { Business } from "./Business";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 interface BusinessState {
+  imagem: string;
   id: number;
   nome: string;
   custo: number;
@@ -25,21 +28,76 @@ interface BusinessState {
   private listeners: (() => void )[] = [];
 
   constructor() {
-    this.resetarNegocios()
+    this.carregarNegocios();
   }
+
+// Método para carregar os negócios do AsyncStorage
+async carregarNegocios() {
+  try {
+    const jsonValue = await AsyncStorage.getItem('@negocios');
+    if (jsonValue !== null) {
+      const negocios = JSON.parse(jsonValue);
+      this.listaNegocios = negocios.map((negocio: BusinessState) => {
+        return new Business(
+          negocio.id,
+          negocio.nome,
+          negocio.custo,
+          negocio.lucro,
+          negocio.nivelEficiencia,
+          negocio.tempoProducao,
+          negocio.imagem,
+          negocio.quantidade,
+          negocio.desbloqueado,
+          negocio.automatic
+        );
+      });
+    }
+    console.log('Carregou:', this.listaNegocios.at(0)?.getCusto());
+  } catch (e) {
+    console.error('Erro ao carregar negócios:', e);
+  }
+}
+
+   // Método para salvar os negócios no AsyncStorage
+   async salvarNegocios() {
+    try {
+      const jsonValue = JSON.stringify(this.listaNegocios.map(negocio => ({
+        id: negocio.id,
+        nome: negocio.nome,
+        custo: negocio.custo,
+        lucro: negocio.lucro,
+        nivelEficiencia: negocio.nivelEficiencia,
+        tempoProducao: negocio.tempoProducao,
+        imagem: negocio.imagem,
+        quantidade: negocio.quantidade,
+        desbloqueado: negocio.desbloqueado,
+        automatic: negocio.automatic,
+      })));
+      await AsyncStorage.setItem('@negocios', jsonValue);
+      console.log('salvou!', this.listaNegocios.at(0)?.getCusto());
+    } catch (e) {
+      console.error('Erro ao salvar negócios:', e);
+    }
+  }
+
+
+  
 
   addListener(listener: () => void){
     this.listeners.push(listener);
+    this.salvarNegocios();
   }
 
   removeListener(listener: () => void) {
     this.listeners = this.listeners.filter((l) => l !== listener);
+    this.salvarNegocios();
   }
 
 
 
   notifyAll() {
     this.listeners.forEach((listener) => listener());
+    this.salvarNegocios();
   }
 
   get todosNegocios() {
@@ -65,43 +123,59 @@ interface BusinessState {
   adicionarNegocio(negocio: Business): void {
     this.listaNegocios.push(negocio);
     this.initialBusinessList.push(negocio); // Adiciona o negócio à lista inicial
+
+    // Salva os negócios após a adição
+    this.salvarNegocios();
   }
 
     // Método para adicionar um novo negócio à lista
     AutomaticTrue(negocio: string): void {
       this.getNegocio(negocio)?.setAutomatic(true);
       this.notifyAll();
+      this.salvarNegocios();
     }
 
-  resetarNegocios(): void {
+// Método para reiniciar os negócios
+resetarNegocios(): void {
+  this.listaNegocios = this.initialBusinessList.map(negocio => {
+    const negocioResetado = new Business(
+      negocio.id,
+      negocio.nome,
+      negocio.custo,
+      negocio.lucro,
+      negocio.nivelEficiencia,
+      negocio.tempoProducao,
+      negocio.imagem,
+      0, // Resetando a quantidade para zero
+      negocio.desbloqueado,
+      negocio.automatic,
+    );
+    return negocioResetado;
+  });
 
-    this.listaNegocios = this.initialBusinessList.map(negocio => {
-      const negocioResetado = new Business(
-        negocio.id,
-        negocio.nome,
-        negocio.custo,
-        negocio.lucro,
-        negocio.nivelEficiencia,
-        negocio.tempoProducao,
-        negocio.imagem,
-        0, // Resetando a quantidade para zero
-        negocio.desbloqueado,
-        negocio.automatic,
-        );
-      return negocioResetado;
-    });
-    this.notifyAll()
-  }
+  this.notifyAll();
+
+  // Salva os negócios após o reset
+  this.salvarNegocios();
+}
   
   setCoin(coin: number, negocio: string){
     const negocioUpdate = this.getNegocio(negocio);
     negocioUpdate?.setCusto(coin)
+    this.salvarNegocios();
+  }
+  setValue(coin: number, negocio: string){
+    const negocioUpdate = this.getNegocio(negocio);
+    negocioUpdate?.setLucro(coin * Math.pow(1.1, negocioUpdate.getQuantidade()));
+    this.salvarNegocios();
   }
 
   atualizarQuantidade(nome: string, novaQuantidade: number): void {
     const negocio = this.listaNegocios.find((n) => n.getNome() === nome);
     if (negocio) {
       negocio.setQuantidade(novaQuantidade);
+      this.salvarNegocios();
+
     } else {
       console.error("Negócio não encontrado:", nome);
     }
@@ -118,6 +192,7 @@ interface BusinessState {
     const indice = this.listaNegocios.findIndex((n) => n.getNome() === nome);
     if (indice !== -1) {
       this.listaNegocios[indice] = novoNegocio;
+      this.salvarNegocios();
     } else {
       console.error("Negócio não encontrado:", nome);
     }
@@ -126,6 +201,7 @@ interface BusinessState {
   // Método para remover um negócio da lista
   removerNegocio(nome: string): void {
     this.listaNegocios = this.listaNegocios.filter((n) => n.getNome() !== nome);
+    this.salvarNegocios();
   }
 
   // Método para obter um negócio da lista pelo nome

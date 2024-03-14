@@ -4,6 +4,7 @@ import { Business } from "../components/gameComponents/Business";
 import StoreItem from "./StoreIcon";
 import BuyButton from "./BuyButton";
 import ProgressBarComponent from "./ProgressBar";
+import BusinessManager from "./gameComponents/BusinessManager";
 
 interface BuyBusinessProps {
   business: Business;
@@ -40,6 +41,8 @@ const BuyBusiness: React.FC<BuyBusinessProps> = ({
     const selectedQuantityNumber = parseInt(selectedQuantity.slice(0, -1)); // Remove o "x" e converte para número
     const newQuantity = itemQuantity + selectedQuantityNumber;
     setItemQuantity(newQuantity); // Atualiza a quantidade local
+    BusinessManager.atualizarQuantidade(business.getNome(), newQuantity);
+    BusinessManager.setValue(business.getLucro(), business.getNome())
     business.setQuantidade(newQuantity); // Atualiza a quantidade no objeto Business
     const newLucro = business.getLucro();
     setItemLucro(newLucro);

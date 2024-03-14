@@ -1,6 +1,5 @@
-// PlayerContext.tsx
-
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import BusinessManager from "../gameComponents/BusinessManager";
 
 interface PlayerContextType {
@@ -26,10 +25,39 @@ export const usePlayer = () => {
 export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [coins, setCoins] = useState(0);
   const [prestigeCoins, setPrestigeCoins] = useState(400);
-  const [, forceUpdate] = useState(0);
-  const newListener = () => {
-    forceUpdate(prev => prev + 1);
-  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const coinsData = await AsyncStorage.getItem("coins");
+        const prestigeCoinsData = await AsyncStorage.getItem("prestigeCoins");
+
+        if (coinsData !== null) {
+          setCoins(parseInt(coinsData));
+        }
+        if (prestigeCoinsData !== null) {
+          setPrestigeCoins(parseInt(prestigeCoinsData));
+        }
+      } catch (error) {
+        console.error("Error loading player data:", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await AsyncStorage.setItem("coins", coins.toString());
+        await AsyncStorage.setItem("prestigeCoins", prestigeCoins.toString());
+      } catch (error) {
+        console.error("Error saving player data:", error);
+      }
+    };
+
+    saveData();
+  }, [coins, prestigeCoins]);
 
   const addCoins = (amount: number) => {
     setCoins((prevCoins) => prevCoins + amount);
@@ -51,7 +79,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (prestigeCoins >= amount) {
       setPrestigeCoins((prevCoins) => prevCoins - amount);
     } else {
-      console.log("Not enough coins!");
+      console.log("Not enough prestige coins!");
     }
   };
 
@@ -60,7 +88,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const prestigeCoinsAmount = coins * 0.002;
     
     setCoins(coinsRemaining);
-    setPrestigeCoins(prestigeCoins + prestigeCoinsAmount)
+    setPrestigeCoins((prevPrestigeCoins) => prevPrestigeCoins + prestigeCoinsAmount);
   
     // Reiniciar todos os negócios para valores iniciais
     BusinessManager.resetarNegocios()
@@ -73,16 +101,15 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   
     console.log("Prestige completed!");
   };
-  
 
   const playerContextValue: PlayerContextType = {
     coins,
+    prestigeCoins,
     addCoins,
     removeCoins,
-    prestige,
-    prestigeCoins,
     addPrestigeCoins,
     removePrestigeCoins,
+    prestige,
   };
 
   return (

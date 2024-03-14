@@ -88,7 +88,7 @@ const BuyButtonManager: React.FC<BuyButtonManagerProps> = ({
 const styles = StyleSheet.create({
   buttonStyle2:{
     width: "100%",
-    padding: 10,
+    paddingRight: 15,
     height: 90,
     borderRadius: 5,
     alignItems: "center",
@@ -104,13 +104,14 @@ const styles = StyleSheet.create({
   },
   image: {
     objectFit: "contain",
-    width: 65,
-    height: 65
+    width: 90,
+    height: 90,
+   
   },
   button: {
+    paddingRight: 15,
     width: "100%",
     backgroundColor: "#FF7F50",
-    padding: 10,
     height: 90,
     borderRadius: 5,
     alignItems: "center",
@@ -118,10 +119,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   buttonDisabled: {
+    paddingRight: 15,
     backgroundColor: "#ccc",
     width: "100%",
     height: 90,
-    padding: 10,
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "space-between",

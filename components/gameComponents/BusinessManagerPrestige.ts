@@ -9,7 +9,6 @@ class BusinessManagerPrestige {
      new BusinessPrestige(1, "Classic Guinea Manager", 100, require("../../assets/gameImg/guineaManagers/guineaManager1.png"), BusinessManager.getNegocioByID(1)!, false),
      new BusinessPrestige(1, "Rich Guinea Manager", 300, require("../../assets/gameImg/guineaManagers/guineaManager2.png"), BusinessManager.getNegocioByID(2)!, false),
      new BusinessPrestige(1, "Rich Guinea Manager", 500, require("../../assets/gameImg/guineaManagers/guineaManager3.png"), BusinessManager.getNegocioByID(3)!, false),
-      
   ];
 
 
