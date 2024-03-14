@@ -30,7 +30,15 @@ const formatNumber = (value: number): string => {
   }
 };
 
-const BuyButton: React.FC<BuyButtonProps> = ({ quantity, coins, initialItemCost, increaseQuantity, style, additionalText, business }) => {
+const BuyButton: React.FC<BuyButtonProps> = ({
+  quantity,
+  coins,
+  initialItemCost,
+  increaseQuantity,
+  style,
+  additionalText,
+  business,
+}) => {
   const [itemCost, setItemCost] = useState(initialItemCost());
   const { removeCoins } = usePlayer();
 
@@ -39,7 +47,9 @@ const BuyButton: React.FC<BuyButtonProps> = ({ quantity, coins, initialItemCost,
     setItemCost(initialItemCost());
   }, [business]);
 
-  const calculateTotalCost = (quantity: string): { totalCost: number; numItems: number } => {
+  const calculateTotalCost = (
+    quantity: string
+  ): { totalCost: number; numItems: number } => {
     let numItems = parseInt(quantity, 10);
     // Calcula o custo total com base na quantidade de itens
     let totalCost = numItems * itemCost;
@@ -52,21 +62,34 @@ const BuyButton: React.FC<BuyButtonProps> = ({ quantity, coins, initialItemCost,
     removeCoins(totalCost);
     setItemCost(totalCost * 1.3);
     BusinessManager.setCoin(totalCost, business.getNome());
+    BusinessManager.salvarNegocios();
     increaseQuantity(); // Aumenta a quantidade de itens
   };
 
   const formattedCost = formatNumber(totalCost);
 
   return coins >= totalCost ? (
-    <TouchableOpacity style={style === 1 ? styles.button : styles.buttonLarge} onPress={handlePress}>
+    <TouchableOpacity
+      style={style === 1 ? styles.button : styles.buttonLarge}
+      onPress={() => {
+        handlePress();
+        BusinessManager.salvarNegocios();
+      }}
+    >
       <Text style={styles.buttonText}>{numItems}x</Text>
-      {style === 2 && <Text style={styles.buttonTextLarge}>{additionalText}</Text>}
+      {style === 2 && (
+        <Text style={styles.buttonTextLarge}>{additionalText}</Text>
+      )}
       <Text style={styles.buttonText}>({formattedCost})</Text>
     </TouchableOpacity>
   ) : (
-    <View style={style === 1 ? styles.buttonDisabled : styles.buttonDisabledLarge}>
+    <View
+      style={style === 1 ? styles.buttonDisabled : styles.buttonDisabledLarge}
+    >
       <Text style={styles.buttonTextDisabled}>{numItems}x</Text>
-      {style === 2 && <Text style={styles.buttonTextLargeDisabled}>{additionalText}</Text>}
+      {style === 2 && (
+        <Text style={styles.buttonTextLargeDisabled}>{additionalText}</Text>
+      )}
       <Text style={styles.buttonTextDisabled}>({formattedCost})</Text>
     </View>
   );
@@ -93,24 +116,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
   },
-  buttonTextLarge:{
-     left: "40%",
-     display:"flex",
-     fontSize: 22,
-     fontWeight:"bold",
-     color: "#ffffff",
+  buttonTextLarge: {
+    left: "40%",
+    display: "flex",
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#ffffff",
   },
-  buttonTextLargeDisabled:{
-     left: "40%",
-     display:"flex",
-     fontSize: 22,
-     fontWeight:"bold",
-     color: "#888",
+  buttonTextLargeDisabled: {
+    left: "40%",
+    display: "flex",
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#888",
   },
   buttonLarge: {
     width: "100%",
     backgroundColor: "#FF7F50",
-    height: 80, 
+    height: 80,
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
@@ -120,7 +143,7 @@ const styles = StyleSheet.create({
   buttonDisabledLarge: {
     backgroundColor: "#ccc",
     width: "100%",
-    height: 80, 
+    height: 80,
     padding: 10,
     borderRadius: 10,
     alignItems: "center",

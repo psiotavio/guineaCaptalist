@@ -22,7 +22,7 @@ const BuyBusinessPrestige: React.FC<BuyBusinessPrestigeProps> = ({
   // Verifica se o negócio está desbloqueado e define o negócio associado como automático
   useEffect(() => {
     if (desbloqueado) {
-      business.getBusinessAlvo()?.setAutomatic(true);
+       business.setBusinessAlvoAuto();
     }
   }, [desbloqueado, business]);
 

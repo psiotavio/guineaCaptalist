@@ -1,4 +1,5 @@
 import { Business } from "./Business";
+import BusinessManager from "./BusinessManager";
 
 export class BusinessPrestige {
   public id: number;
@@ -63,6 +64,11 @@ export class BusinessPrestige {
   // Getters e setters para businessAlvo
   getBusinessAlvo(): Business | null {
     return this.businessAlvo;
+  }
+
+  setBusinessAlvoAuto(): void{
+    BusinessManager.setAuto(this.businessAlvo!.nome!);
+    BusinessManager.salvarNegocios();
   }
 
   setBusinessAlvo(value: Business | null) {

@@ -76,12 +76,15 @@ export class Business {
   }
   
   private atualizarLucro(): void {
-    // Atualiza o lucro com um aumento de 10% por unidade adicional
     this.lucro = this.lucro * Math.pow(1.1, this.quantidade);
   }
 
   getId(): number {
     return this.id
+  }
+
+  setId(id: number): void{ 
+      this.id = id;
   }
 
   getNome(): string {

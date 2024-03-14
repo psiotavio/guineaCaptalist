@@ -44,7 +44,6 @@ const BuyButtonManager: React.FC<BuyButtonManagerProps> = ({
 
   const handlePress = () => {
     BusinessManagerPrestige.setAuto(business.getBusinessAlvo()!);
-    console.log(BusinessManager.getNegocio(business.getBusinessAlvo()!.getNome())!.getAutomatic());
     business.setDesbloqueado(true);
     removePrestigeCoins(itemCost);
   };

@@ -31,32 +31,44 @@ interface BusinessState {
     this.carregarNegocios();
   }
 
-// Método para carregar os negócios do AsyncStorage
-async carregarNegocios() {
-  try {
-    const jsonValue = await AsyncStorage.getItem('@negocios');
-    if (jsonValue !== null) {
-      const negocios = JSON.parse(jsonValue);
-      this.listaNegocios = negocios.map((negocio: BusinessState) => {
-        return new Business(
-          negocio.id,
-          negocio.nome,
-          negocio.custo,
-          negocio.lucro,
-          negocio.nivelEficiencia,
-          negocio.tempoProducao,
-          negocio.imagem,
-          negocio.quantidade,
-          negocio.desbloqueado,
-          negocio.automatic
-        );
-      });
+  onBusinessesLoaded(callback: () => void) {
+    // Verifica se a lista de negócios já foi carregada
+    if (this.listaNegocios.length > 0) {
+      callback(); // Chama o callback imediatamente se os negócios já estiverem carregados
+    } else {
+      // Se os negócios ainda não estiverem carregados, adicione o callback à lista de ouvintes
+      this.listeners.push(callback);
     }
-    console.log('Carregou:', this.listaNegocios.at(0)?.getCusto());
-  } catch (e) {
-    console.error('Erro ao carregar negócios:', e);
   }
-}
+
+  async carregarNegocios() {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@negocios');
+      if (jsonValue !== null) {
+        const negocios = JSON.parse(jsonValue);
+        this.listaNegocios = negocios.map((negocio: BusinessState) => {
+          return new Business(
+            negocio.id,
+            negocio.nome,
+            negocio.custo,
+            negocio.lucro,
+            negocio.nivelEficiencia,
+            negocio.tempoProducao,
+            negocio.imagem,
+            negocio.quantidade,
+            negocio.desbloqueado,
+            negocio.automatic
+          );
+        });
+      }
+      console.log('Carregou:', this.listaNegocios.at(0)?.getCusto());
+      // Após carregar os negócios, notifique todos os ouvintes
+      this.notifyAll();
+    } catch (e) {
+      console.error('Erro ao carregar negócios:', e);
+    }
+  }
+
 
    // Método para salvar os negócios no AsyncStorage
    async salvarNegocios() {
@@ -164,9 +176,16 @@ resetarNegocios(): void {
     negocioUpdate?.setCusto(coin)
     this.salvarNegocios();
   }
+
   setValue(coin: number, negocio: string){
     const negocioUpdate = this.getNegocio(negocio);
     negocioUpdate?.setLucro(coin * Math.pow(1.1, negocioUpdate.getQuantidade()));
+    this.salvarNegocios();
+  }
+
+  setAuto(negocio: string){
+    const negocioUpdate = this.getNegocio(negocio);
+    negocioUpdate?.setAutomatic(true);
     this.salvarNegocios();
   }
 
@@ -212,8 +231,11 @@ resetarNegocios(): void {
   // Método para obter um negócio da lista pelo nome
   getNegocioByID(id: number): Business | undefined {
     const negocioEncontrado = this.listaNegocios.find((n) => n.getId() === id);
+    console.log("TAPEGANO", negocioEncontrado)
     return negocioEncontrado ? negocioEncontrado : undefined;
   }
+
+ 
   
 
   // Atualize a assinatura da função getTodosNegocios() para retornar Business[]
